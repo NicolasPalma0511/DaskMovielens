@@ -17,7 +17,7 @@ services:
     command: dask-worker dask-scheduler:8786
 
   processor:
-    build: ./app # Cambiado para usar el Dockerfile de la carpeta 'app'
+    build: ./app
     container_name: dask-processor
     volumes:
       - ./app:/usr/src/app
