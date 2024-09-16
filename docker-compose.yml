@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  scheduler:
+    build: .
+    container_name: dask-scheduler
+    ports:
+      - "8786:8786"
+      - "8787:8787"
+    command: dask-scheduler
+
+  worker:
+    build: ./dask-worker
+    container_name: dask-worker
+    depends_on:
+      - scheduler
+    command: dask-worker dask-scheduler:8786
+
+  processor:
+    build: ./app # Cambiado para usar el Dockerfile de la carpeta 'app'
+    container_name: dask-processor
+    volumes:
+      - ./app:/usr/src/app
+    working_dir: /usr/src/app
+    command: python process_data.py
+    depends_on:
+      - scheduler
+      - worker
